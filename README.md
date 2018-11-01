@@ -15,7 +15,15 @@ You will be able to:
 
 Think about why gradient descent applies so well to a cost function.  Initially, we said that the cost of our function, meaning the difference between what our regression line predicted and the dataset, changed as we altered the y-intercept or the slope of the function.
 
-Remember that mathematically, when we say cost function, we use the residual sum of squares where $$ RSS = \sum_{i=1}^n(actual - expected)^2 = \sum_{i=1}^n(y_i - \hat{y})^2 = \sum_{i=1}^n(y_i - (mx_i + b))^2$$ for all $x$ and $y$ values of our dataset.  So in the graph directly below, $x_i$ and $y_i$  would be our points representing a movie's budget and revenue.  Meanwhile, $mx_i + b $ is our predicted $y$ value for a given $x$ value, of a budget. 
+Remember that mathematically, when we say cost function, we use the residual sum of squares where 
+$$ 
+\begin{align}
+RSS &= \sum_{i=1}^n(actual - expected)^2 \\
+&= \sum_{i=1}^n(y_i - \hat{y})^2 \\
+&= \sum_{i=1}^n(y_i - (mx_i + b))^2
+\end{align}
+$$ 
+for all $x$ and $y$ values of our dataset.  So in the graph directly below, $x_i$ and $y_i$  would be our points representing a movie's budget and revenue.  Meanwhile, $mx_i + b $ is our predicted $y$ value for a given $x$ value, of a budget. 
 
 And RSS takes the difference between $mx_i + b$, the $y_i$ value our regression line (the red line below) predicts, and our actual $y$, and sum up these squares for each piece of data in our dataset.  That is the residual sum of squares.
 
@@ -79,7 +87,12 @@ In two dimensions, we decrease our RSS simply by moving forwards or backwards al
 Allowing us to change both variables, $m$ and $b$ means calculating how RSS varies with both $m$ and $b$. 
 
 Because the RSS is a function of how we change our values of $m$ and $b$, we can express this relationship mathematically by saying the cost function, $J$ is the following:  
-$$J(m, b) = \sum_{i=1}^{n}(y_i - (mx_i + b))^2$$
+$$
+\begin{align}
+J(m, b) & = \sum_{i=1}^{n}(y_i - \hat{y})^2\\
+J(m, b) & = \sum_{i=1}^{n}(y_i - (mx_i + b))^2 &&\text{notice $\hat{y} = mx + b$}\\
+\end{align}
+$$
 
 In the function above, $J$ is a function of $m$ and $b$. $J$ just represents the residual sum of squares, which varies as the $m$ and $b$ variables of our regression line are changed.  
 
@@ -99,51 +112,89 @@ As we know, the gradient of a function is simply the partial derivatives with re
 
 $$ \nabla J(m, b) = \frac{\delta J}{\delta m}, \frac{\delta J}{\delta b}$$
 
-In calculating the partial derivatives of our function $J(m, b) = \sum_{i=1}^{n}(y_i - (mx_i + b))^2$, we won't change the result if we ignore the summation until the very end.  We'll do that to make our calculations easier.
+In calculating the partial derivatives of our function $J(m, b) = \sum_{i=1}^{n}(y_i - (mx_i + b))^2$, **we won't change the result if we ignore the summation until the very end**.  We'll do that to make our calculations easier.
 
 Ok, so let's take our partial derivatives of the following:
 
-$$\frac{\delta J}{\delta m}J(m, b) = \frac{\delta J}{\delta m}(y - (mx + b))^2$$
-
-$$\frac{\delta J}{\delta b}J(m, b) = \frac{\delta J}{\delta b}(y - (mx + b))^2$$
+$$
+\begin{align}
+\frac{\delta J}{\delta m}J(m, b) & = \boldsymbol{\frac{\delta J}{\delta m}}(y - (mx + b))^2  &&\text{partial derivative with respect to} \textbf{ m}\\
+\\
+\frac{\delta J}{\delta b}J(m, b) & = \boldsymbol{\frac{\delta J}{\delta b}}(y - (mx + b))^2  &&\text{partial derivative with respect to} \textbf{ b}\\
+\end{align}
+$$
 
 ## Taking our first partial derivative
 
-Let's start with taking the partial derivative with respect to $m$.
+Let's start with taking the **partial derivative** with respect to $m$.
 
 $$\frac{\delta J}{\delta m}J(m, b) = \frac{\delta J}{\delta m}(y - (mx + b))^2$$
 
 Now this is a tricky function to take the derivative of.  So we can use functional composition followed by the chain rule to make it easier.  Using functional composition, we can rewrite our function $J$ as two functions: 
 
-$$g(m,b) = y - (mx + b)$$
-
-$$J(g(m,b)) = (g(m,b))^2$$
+$$
+\begin{align}
+g(m,b)&= y - (mx + b) &&\text{set $g$ equal to $y-\hat{y}$}\\
+\\
+J(g(m,b))&= (g(m,b))^2 &&\text{now $J$ is a function of $g$ and $J=g^2$}\\
+\end{align}
+$$
 
 Now using the chain rule to find the partial derivative with respect to a change in the slope, gives us:
 
-$$\frac{dJ}{dm}J(g) = \frac{dJ}{dg}J(g(m, b))*\frac{dg}{dm}g(m,b)$$
+$$
+[1]\mspace{5ex}\frac{dJ}{dm}J(g) = \frac{dJ}{dg}J(g(m, b))*\frac{dg}{dm}g(m,b)
+$$
+
+Because **g** is a function of **m** we get $\boldsymbol{\frac{dg}{dm}}(g)$ and 
+
+**J** is a function of **g (which is a function of m**) we get $\boldsymbol{\frac{dJ}{dg}}(J)$.
 
 Our next step is to solve these derivatives individually: 
-
-$$\frac{dJ}{dg}J(g(m, b)) = \frac{dJ}{dg}g(m,b)^2 = 2*g(m,b)$$
-
-$$\frac{dg}{dm}g(m,b) =  \frac{dg}{dm} (y - (mx +b)) = \frac{dg}{dm}y - \frac{dg}{dm}mx - \frac{dg}{dm}b = -x $$
+$$
+\begin{align}
+\frac{dJ}{dg}J(g(m, b))&=\frac{dJ}{dg}g(m,b)^2 &&\text{Solve $\boldsymbol{\frac{dJ}{dg}}(J)$}\\
+\\
+&= 2*g(m,b)\\
+\\
+\frac{dg}{dm}g(m,b)&=\frac{dg}{dm} (y - (mx +b)) &&\text{Solve $\boldsymbol{\frac{dg}{dm}}(g)$}\\
+\\
+&=\frac{dg}{dm} (y - mx - b)\\
+\\
+&=\frac{dg}{dm}y - \frac{dg}{dm}mx - \frac{dg}{dm}b\\
+\\
+&= 0-x-0\\
+\\
+&=-x\\
+\end{align}
+$$
 
 > Each of the terms are treated as constants, except for the middle term.  
 
-Now plugging these back into our chain rule we have: 
-
- $\frac{dJ}{dg}J(g(m,b))*\frac{dg}{dm}g(m,b) = (2*g(m,b))*-x = 2*(y - (mx + b))*-x $
- 
+Now plugging these back into our chain rule [1] we have: 
+$$
+\begin{align}
+\color{blue}{\frac{dJ}{dg}J(g(m,b))}*\color{red}{\frac{dg}{dm}g(m,b)}&=\color{blue}{(2*g(m,b))}*\color{red}{-x}\\
+\\
+&= 2*(y - (mx + b))*-x
+\\
+\end{align}
+$$
  So
  
-$$\frac{\delta J}{\delta m}J(m, b) =  2*(y - (mx + b))*-x = -2x*(y - (mx + b ))  $$
+$$
+\begin{align}
+[1]\mspace{5ex}\frac{\delta J}{\delta m}J(m, b)&=2*(y - (mx + b))*-x\\
+\\
+&= -2x*(y - (mx + b ))\\
+\end{align}
+$$
 
 ## Our second partial derivative
 
 Ok, now let's calculate the partial derivative with respect to a change in the y-intercept.  We express this mathematically with the following:
 
-$$\frac{\delta J}{\delta b}J(m, b) = \frac{dJ}{db}(mx + b - y)^2$$
+$$\frac{\delta J}{\delta b}J(m, b) = \frac{dJ}{db}(y - (mx + b))^2$$
 
 Then once again, we use functional composition following by the chain rule.  So we view our cost function as the same two functions $g(m,b)$ and $J(g(m,b))$.  
 
@@ -153,17 +204,35 @@ $$J(g(m,b)) = (g(m,b))^2$$
 
 So applying the chain rule, to this same function composition, we get:
 
-$$\frac{dJ}{db}J(g) = \frac{dJ}{dg}J(g)*\frac{dg}{db}g(m,b)$$
+$$[2]\mspace{5ex}\frac{dJ}{db}J(g) = \frac{dJ}{dg}J(g)*\frac{dg}{db}g(m,b)$$
 
 Now, our next step is to calculate these partial derivatives individually.
 
 From our earlier calculation of the partial derivative, we know that $\frac{dJ}{dg}J(g(m,b)) = \frac{dJ}{dg}g(m,b)^2 = 2*g(m,b)$.  The only thing left to calculate is $\frac{dg}{db}g(m,b)$.
 
-$\frac{dg}{db}g(m,b) = \frac{dg}{db}(y - (mx + b) ) = -1$
+$$
+\begin{align}
+\frac{dg}{db}g(m,b)&=\frac{dg}{db}(y - (mx + b) )\\
+\\
+&=\frac{dg}{db}(y-mx-b)\\
+\\
+&=\frac{db}{db}y-\frac{db}{db}mx-\frac{dg}{db}b\\
+\\
+&=0-0-1\\
+\\
+&= -1\\
+\end{align}
+$$
 
-Now we plug our terms into our chain rule and get: 
+Now we plug our terms into our chain rule [2] and get: 
 
-$$ \frac{dJ}{dg}J(g)*\frac{dg}{db}g(m,b) = 2*g(m,b)*-1 = -2*(y - (mx + b)) $$
+$$
+\begin{align}
+\color{blue}{\frac{dJ}{dg}J(g)}*\color{red}{\frac{dg}{db}g(m,b)}&= \color{blue}{2*g(m,b)}*\color{red}{-1}\\
+\\
+&= -2*(y - (mx + b))\\
+\end{align}
+$$
 
 ## Using both of our partial derivatives for gradient descent
 
