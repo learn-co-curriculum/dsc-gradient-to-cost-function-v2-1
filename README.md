@@ -98,7 +98,7 @@ In the function above, $J$ is a function of $m$ and $b$. $J$ just represents the
 
 Just our other multivariable functions we have seen thus far, we can display it in three dimensions, and it looks like the following.
 
-![](./gradientdescent.png)
+![](./images/gradientdescent.png)
 
 The three-dimensional graph above shows how the cost associated with our regression line changes as the slope and y-intercept values are changed.  
 
