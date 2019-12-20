@@ -7,9 +7,7 @@ In the previous lesson, we learned the mathematical definition of a gradient.  W
 
 ## Objectives
 You will be able to:
-- Represent the RSS as a multivariable function
-- Understand how to create a cost function when we allow both slope and intercept to change in our linear regression
-
+- Represent RSS as a multivariable function and take partial derivatives to perform gradient descent
 
 ## Representing RSS as a multivariable function
 
@@ -124,113 +122,25 @@ $$
 \end{align}
 $$
 
-## Taking our first partial derivative
+You'll notice that taking the partial derivatives of these functions is not that simple. You've learned a set of rules about derivatives in this section, but if you want to take these two derivatives successfully, you'll need to use the **chain rule**. The chain rule is a formula to compute the derivative of a composite function.
 
-Let's start with taking the **partial derivative** with respect to $m$.
+The **chain rule** basically tells you how to compute the derivative of nearly _any function_ (or any "molecular" function built up from fundamental "atomic" functions like $sin(x)$ or $e^x$).
 
-$$\frac{\delta J}{\delta m}J(m, b) = \frac{\delta J}{\delta m}(y - (mx + b))^2$$
+In this lesson, we don't want to get lost in the details of the chain rule and how to get to the the partial derivatives needed in this lesson, but in the appendix, you can find:
+- a lesson on the chain rule in general
+- A lesson that walks you through the details of finding the partial derivatives in this lesson.
 
-Now this is a tricky function to take the derivative of.  So we can use functional composition followed by the chain rule to make it easier.  Using functional composition, we can rewrite our function $J$ as two functions: 
+The resulting partial derivatives are:
 
 $$
 \begin{align}
-g(m,b)&= y - (mx + b) &&\text{set $g$ equal to $y-\hat{y}$}\\
-\\
-J(g(m,b))&= (g(m,b))^2 &&\text{now $J$ is a function of $g$ and $J=g^2$}\\
+\frac{\delta J}{\delta m}J(m, b)&= -2x*(y - (mx + b ))
 \end{align}
 $$
 
-Now using the chain rule to find the partial derivative with respect to a change in the slope, gives us:
-
-$$
-[1]\mspace{5ex}\frac{dJ}{dm}J(g) = \frac{dJ}{dg}J(g(m, b))*\frac{dg}{dm}g(m,b)
-$$
-
-Because **g** is a function of **m** we get $\boldsymbol{\frac{dg}{dm}}(g)$ and 
-
-**J** is a function of **g (which is a function of m**) we get $\boldsymbol{\frac{dJ}{dg}}(J)$.
-
-Our next step is to solve these derivatives individually: 
 $$
 \begin{align}
-\frac{dJ}{dg}J(g(m, b))&=\frac{dJ}{dg}g(m,b)^2 &&\text{Solve $\boldsymbol{\frac{dJ}{dg}}(J)$}\\
-\\
-&= 2*g(m,b)\\
-\\
-\frac{dg}{dm}g(m,b)&=\frac{dg}{dm} (y - (mx +b)) &&\text{Solve $\boldsymbol{\frac{dg}{dm}}(g)$}\\
-\\
-&=\frac{dg}{dm} (y - mx - b)\\
-\\
-&=\frac{dg}{dm}y - \frac{dg}{dm}mx - \frac{dg}{dm}b\\
-\\
-&= 0-x-0\\
-\\
-&=-x\\
-\end{align}
-$$
-
-> Each of the terms are treated as constants, except for the middle term.  
-
-Now plugging these back into our chain rule [1] we have: 
-$$
-\begin{align}
-\color{blue}{\frac{dJ}{dg}J(g(m,b))}*\color{red}{\frac{dg}{dm}g(m,b)}&=\color{blue}{(2*g(m,b))}*\color{red}{-x}\\
-\\
-&= 2*(y - (mx + b))*-x
-\\
-\end{align}
-$$
- So
- 
-$$
-\begin{align}
-[1]\mspace{5ex}\frac{\delta J}{\delta m}J(m, b)&=2*(y - (mx + b))*-x\\
-\\
-&= -2x*(y - (mx + b ))\\
-\end{align}
-$$
-
-## Our second partial derivative
-
-Ok, now let's calculate the partial derivative with respect to a change in the y-intercept.  We express this mathematically with the following:
-
-$$\frac{\delta J}{\delta b}J(m, b) = \frac{dJ}{db}(y - (mx + b))^2$$
-
-Then once again, we use functional composition following by the chain rule.  So we view our cost function as the same two functions $g(m,b)$ and $J(g(m,b))$.  
-
-$$g(m,b) = y - (mx + b)$$
-
-$$J(g(m,b)) = (g(m,b))^2$$
-
-So applying the chain rule, to this same function composition, we get:
-
-$$[2]\mspace{5ex}\frac{dJ}{db}J(g) = \frac{dJ}{dg}J(g)*\frac{dg}{db}g(m,b)$$
-
-Now, our next step is to calculate these partial derivatives individually.
-
-From our earlier calculation of the partial derivative, we know that $\frac{dJ}{dg}J(g(m,b)) = \frac{dJ}{dg}g(m,b)^2 = 2*g(m,b)$.  The only thing left to calculate is $\frac{dg}{db}g(m,b)$.
-
-$$
-\begin{align}
-\frac{dg}{db}g(m,b)&=\frac{dg}{db}(y - (mx + b) )\\
-\\
-&=\frac{dg}{db}(y-mx-b)\\
-\\
-&=\frac{db}{db}y-\frac{db}{db}mx-\frac{dg}{db}b\\
-\\
-&=0-0-1\\
-\\
-&= -1\\
-\end{align}
-$$
-
-Now we plug our terms into our chain rule [2] and get: 
-
-$$
-\begin{align}
-\color{blue}{\frac{dJ}{dg}J(g)}*\color{red}{\frac{dg}{db}g(m,b)}&= \color{blue}{2*g(m,b)}*\color{red}{-1}\\
-\\
-&= -2*(y - (mx + b))\\
+\frac{\delta J}{\delta b}J(m, b) & = -2*(y - (mx + b))
 \end{align}
 $$
 
@@ -289,7 +199,7 @@ plt.ylabel("y", fontsize=14);
 ```
 
 
-![png](index_files/index_38_0.png)
+![png](index_files/index_19_0.png)
 
 
 ## Summary
