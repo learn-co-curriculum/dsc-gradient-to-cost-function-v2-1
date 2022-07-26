@@ -8,7 +8,7 @@ In the previous lesson, we learned the mathematical definition of a gradient.  W
 
 You will be able to:
 
-- Represent RSS as a multivariable function and take partial derivatives to perform gradient descent
+* Represent RSS as a multivariable function and take partial derivatives to perform gradient descent
 
 
 ## Representing RSS as a multivariable function
