@@ -1,4 +1,3 @@
-
 # Gradient to Cost Function
 
 ## Introduction
@@ -7,6 +6,7 @@ In the previous lesson, we learned the mathematical definition of a gradient.  W
 
 ## Objectives
 You will be able to:
+
 - Represent RSS as a multivariable function and take partial derivatives to perform gradient descent
 
 ## Representing RSS as a multivariable function
@@ -47,7 +47,9 @@ plt.ylabel("y", fontsize=14);
 ```
 
 
+    
 ![png](index_files/index_6_0.png)
+    
 
 
 And we when we just plotted how RSS changes as we change one variable of our regression line, $m$ or $b$, we note how this looks like a curve, and call it our cost curve.
@@ -77,7 +79,9 @@ plt.title("RSS with changes to slope", fontsize=16);
 ```
 
 
+    
 ![png](index_files/index_8_0.png)
+    
 
 
 In two dimensions, we decrease our RSS simply by moving forwards or backwards along the cost curve which is the equivalent of changing our variable, in this case y-intercept.  So the cost curve above indicates that changing the regression line from having a $m$ slope from 42 to 45 decreases our cost, the RSS.
@@ -199,7 +203,9 @@ plt.ylabel("y", fontsize=14);
 ```
 
 
+    
 ![png](index_files/index_19_0.png)
+    
 
 
 ## Summary
